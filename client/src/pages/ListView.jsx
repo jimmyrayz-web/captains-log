@@ -51,7 +51,10 @@ export default function ListView() {
                   <div className="entry-thumb placeholder">⛵</div>
                 )}
                 <div className="entry-summary">
-                  <div className="date">{formatDate(entry.date)}</div>
+                  <div className="date">
+                    {formatDate(entry.date)}
+                    {entry.arrival_point && ` - ${entry.arrival_point}`}
+                  </div>
                   {entry.location && <div className="location">{entry.location}</div>}
                   <div className="meta">
                     {entry.distance_nm != null && <span>{entry.distance_nm} nm</span>}
