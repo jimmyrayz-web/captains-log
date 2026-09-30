@@ -200,7 +200,7 @@ export default function EntryForm() {
               checked={form.oil_checked}
               onChange={(e) => update('oil_checked', e.target.checked)}
             />
-            <label htmlFor="oil_checked">Oil Checked</label>
+            <label htmlFor="oil_checked">Departure Checklist Complete</label>
           </div>
         </div>
 
