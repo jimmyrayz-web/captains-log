@@ -109,7 +109,7 @@ export default function EntryDetail() {
             </div>
           )}
           <div className="stat">
-            <span className="label">Departure Checklist</span>
+            <span className="label">Departure Checklist Complete</span>
             <span className={`badge ${entry.oil_checked ? 'yes' : 'no'}`}>
               {entry.oil_checked ? '✓ Yes' : '✕ No'}
             </span>
