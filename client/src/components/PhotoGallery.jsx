@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { photoUrl, uploadPhotos, deletePhoto } from '../api.js';
 
-export default function PhotoGallery({ entryId, photos, onChange }) {
+export default function PhotoGallery({ entryId, photos, onChange, readOnly = false }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
   const fileInput = useRef(null);
@@ -41,31 +41,35 @@ export default function PhotoGallery({ entryId, photos, onChange }) {
           {photos.map((photo) => (
             <div className="photo-tile" key={photo.id}>
               <img src={photoUrl(photo.id)} alt={photo.filename || ''} />
-              <button
-                type="button"
-                className="no-print"
-                onClick={() => handleDelete(photo.id)}
-                aria-label="Delete photo"
-              >
-                ✕
-              </button>
+              {!readOnly && (
+                <button
+                  type="button"
+                  className="no-print"
+                  onClick={() => handleDelete(photo.id)}
+                  aria-label="Delete photo"
+                >
+                  ✕
+                </button>
+              )}
             </div>
           ))}
         </div>
       )}
 
-      <label className="photo-upload no-print" style={{ display: 'block', cursor: 'pointer' }}>
-        {uploading ? 'Uploading…' : '📷 Tap to add photos'}
-        <input
-          ref={fileInput}
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleFiles}
-          disabled={uploading}
-          style={{ display: 'block', margin: '0.5rem auto 0' }}
-        />
-      </label>
+      {!readOnly && (
+        <label className="photo-upload no-print" style={{ display: 'block', cursor: 'pointer' }}>
+          {uploading ? 'Uploading…' : '📷 Tap to add photos'}
+          <input
+            ref={fileInput}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleFiles}
+            disabled={uploading}
+            style={{ display: 'block', margin: '0.5rem auto 0' }}
+          />
+        </label>
+      )}
     </div>
   );
 }

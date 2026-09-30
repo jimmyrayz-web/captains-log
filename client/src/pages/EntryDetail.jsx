@@ -130,11 +130,9 @@ export default function EntryDetail() {
           </div>
         )}
 
-        <PhotoGallery
-          entryId={entry.id}
-          photos={entry.photos}
-          onChange={(photos) => setEntry((e) => ({ ...e, photos }))}
-        />
+        {entry.photos.length > 0 && (
+          <PhotoGallery entryId={entry.id} photos={entry.photos} readOnly />
+        )}
       </div>
     </div>
   );

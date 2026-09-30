@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getEntry, createEntry, updateEntry } from '../api.js';
+import PhotoGallery from '../components/PhotoGallery.jsx';
 
 const EMPTY = {
   date: new Date().toISOString().slice(0, 10),
@@ -23,6 +24,7 @@ export default function EntryForm() {
   const isEdit = Boolean(id);
   const navigate = useNavigate();
   const [form, setForm] = useState(EMPTY);
+  const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -46,6 +48,7 @@ export default function EntryForm() {
           maintenance_notes: entry.maintenance_notes || '',
           notes: entry.notes || '',
         });
+        setPhotos(entry.photos || []);
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
@@ -218,6 +221,8 @@ export default function EntryForm() {
             onChange={(e) => update('notes', e.target.value)}
           />
         </div>
+
+        {isEdit && <PhotoGallery entryId={id} photos={photos} onChange={setPhotos} />}
 
         <div className="form-actions">
           <button
