@@ -41,7 +41,12 @@ export default function PhotoGallery({ entryId, photos, onChange }) {
           {photos.map((photo) => (
             <div className="photo-tile" key={photo.id}>
               <img src={photoUrl(photo.id)} alt={photo.filename || ''} />
-              <button type="button" onClick={() => handleDelete(photo.id)} aria-label="Delete photo">
+              <button
+                type="button"
+                className="no-print"
+                onClick={() => handleDelete(photo.id)}
+                aria-label="Delete photo"
+              >
                 ✕
               </button>
             </div>
@@ -49,7 +54,7 @@ export default function PhotoGallery({ entryId, photos, onChange }) {
         </div>
       )}
 
-      <label className="photo-upload" style={{ display: 'block', cursor: 'pointer' }}>
+      <label className="photo-upload no-print" style={{ display: 'block', cursor: 'pointer' }}>
         {uploading ? 'Uploading…' : '📷 Tap to add photos'}
         <input
           ref={fileInput}

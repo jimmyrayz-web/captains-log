@@ -6,7 +6,7 @@ import EntryDetail from './pages/EntryDetail.jsx';
 export default function App() {
   return (
     <div className="app-shell">
-      <header className="top-nav">
+      <header className="top-nav no-print">
         <Link to="/" className="brand">
           <span className="anchor">⚓</span>
           Captain's Log
@@ -27,7 +27,7 @@ export default function App() {
         </Routes>
       </main>
 
-      <footer className="site-footer">Fair winds and following seas ⛵</footer>
+      <footer className="site-footer no-print">Fair winds and following seas ⛵</footer>
     </div>
   );
 }

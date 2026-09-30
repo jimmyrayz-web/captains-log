@@ -39,7 +39,10 @@ export default function EntryDetail() {
 
   return (
     <div className="card">
-      <div className="top-actions">
+      <div className="top-actions no-print">
+        <button type="button" className="button secondary" onClick={() => window.print()}>
+          Save as PDF
+        </button>
         <Link to={`/entries/${id}/edit`} className="button secondary">
           Edit
         </Link>

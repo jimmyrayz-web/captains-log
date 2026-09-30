@@ -456,6 +456,30 @@ footer.site-footer {
   font-size: 0.85rem;
 }
 
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .main-content {
+    max-width: none;
+    padding: 0;
+  }
+
+  .card {
+    box-shadow: none;
+    border: none;
+  }
+
+  .photo-tile {
+    break-inside: avoid;
+  }
+}
+
 @media (max-width: 600px) {
   .top-nav {
     padding: 0.85rem 1rem;
