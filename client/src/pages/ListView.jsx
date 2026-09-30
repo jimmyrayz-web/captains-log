@@ -21,7 +21,7 @@ export default function ListView() {
   return (
     <>
       <div className="page-header">
-        <h1>Voyage Log</h1>
+        <h1>Trip Log</h1>
       </div>
 
       {error && <div className="error-banner">{error}</div>}
