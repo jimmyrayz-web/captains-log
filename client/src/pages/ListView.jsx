@@ -8,6 +8,13 @@ function formatDate(dateStr) {
   return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
+function formatRoute(entry) {
+  if (entry.departure_point && entry.arrival_point) {
+    return `${entry.departure_point} to ${entry.arrival_point}`;
+  }
+  return entry.departure_point || entry.arrival_point || '';
+}
+
 export default function ListView() {
   const [entries, setEntries] = useState(null);
   const [error, setError] = useState('');
@@ -53,7 +60,7 @@ export default function ListView() {
                 <div className="entry-summary">
                   <div className="date">
                     {formatDate(entry.date)}
-                    {entry.arrival_point && ` - ${entry.arrival_point}`}
+                    {formatRoute(entry) && ` - ${formatRoute(entry)}`}
                   </div>
                   {entry.location && <div className="location">{entry.location}</div>}
                   <div className="meta">
