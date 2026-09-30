@@ -87,13 +87,7 @@ function normalizeBody(body) {
 // List entries, most recent first
 app.get('/api/entries', async (req, res, next) => {
   try {
-    const result = await db.execute(`
-      SELECT e.*, (
-        SELECT p.id FROM photos p WHERE p.entry_id = e.id ORDER BY p.id ASC LIMIT 1
-      ) AS cover_photo_id
-      FROM entries e
-      ORDER BY e.date DESC, e.id DESC
-    `);
+    const result = await db.execute('SELECT * FROM entries ORDER BY date DESC, id DESC');
     res.json(result.rows.map(serializeEntry));
   } catch (err) {
     next(err);

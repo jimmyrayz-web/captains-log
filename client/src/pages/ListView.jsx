@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { listEntries, photoUrl } from '../api.js';
+import { listEntries } from '../api.js';
 
 function formatDate(dateStr) {
   const d = new Date(`${dateStr}T00:00:00`);
@@ -52,11 +52,6 @@ export default function ListView() {
           {entries.map((entry) => (
             <li key={entry.id} className="card">
               <Link to={`/entries/${entry.id}`} className="entry-card">
-                {entry.cover_photo_id ? (
-                  <img className="entry-thumb" src={photoUrl(entry.cover_photo_id)} alt="" />
-                ) : (
-                  <div className="entry-thumb placeholder">⛵</div>
-                )}
                 <div className="entry-summary">
                   <div className="date">
                     {formatDate(entry.date)}
