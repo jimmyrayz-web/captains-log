@@ -53,7 +53,6 @@ export default function EntryDetail() {
 
       <div className="detail-header">
         <div className="date">{formatDate(entry.date)}</div>
-        {entry.location && <div className="location">{entry.location}</div>}
       </div>
 
       <div className="detail-body">

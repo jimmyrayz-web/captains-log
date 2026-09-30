@@ -5,7 +5,6 @@ import PhotoGallery from '../components/PhotoGallery.jsx';
 
 const EMPTY = {
   date: new Date().toISOString().slice(0, 10),
-  location: '',
   weather: '',
   engine_hours: '',
   departure_point: '',
@@ -35,7 +34,6 @@ export default function EntryForm() {
       .then((entry) => {
         setForm({
           date: entry.date || '',
-          location: entry.location || '',
           weather: entry.weather || '',
           engine_hours: entry.engine_hours ?? '',
           departure_point: entry.departure_point || '',
@@ -103,16 +101,6 @@ export default function EntryForm() {
               value={form.date}
               onChange={(e) => update('date', e.target.value)}
               required
-            />
-          </div>
-          <div className="field">
-            <label htmlFor="location">Location / Marina</label>
-            <input
-              id="location"
-              type="text"
-              value={form.location}
-              onChange={(e) => update('location', e.target.value)}
-              placeholder="e.g. Newport Marina"
             />
           </div>
           <div className="field">

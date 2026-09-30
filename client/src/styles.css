@@ -199,11 +199,6 @@ a {
   font-size: 1.05rem;
 }
 
-.entry-summary .location {
-  color: var(--teal);
-  font-weight: 600;
-}
-
 .entry-summary .meta {
   margin-top: 0.25rem;
   font-size: 0.88rem;
@@ -303,12 +298,6 @@ textarea {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--navy);
-}
-
-.detail-header .location {
-  color: var(--teal);
-  font-weight: 600;
-  font-size: 1.1rem;
 }
 
 .detail-body {

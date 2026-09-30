@@ -25,7 +25,6 @@ const upload = multer({
 
 const ENTRY_FIELDS = [
   'date',
-  'location',
   'weather',
   'engine_hours',
   'departure_point',

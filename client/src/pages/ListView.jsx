@@ -62,7 +62,6 @@ export default function ListView() {
                     {formatDate(entry.date)}
                     {formatRoute(entry) && ` - ${formatRoute(entry)}`}
                   </div>
-                  {entry.location && <div className="location">{entry.location}</div>}
                   <div className="meta">
                     {entry.distance_nm != null && <span>{entry.distance_nm} nm</span>}
                     {entry.duration_hours != null && <span>{entry.duration_hours} hrs</span>}
