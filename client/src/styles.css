@@ -46,6 +46,8 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
   box-shadow: 0 2px 8px var(--shadow);
   position: sticky;
   top: 0;
@@ -77,6 +79,7 @@ a {
   border: none;
   border-radius: 8px;
   padding: 0.55rem 1.1rem;
+  white-space: nowrap;
   font-size: 0.95rem;
   font-weight: 600;
   text-decoration: none;
@@ -485,7 +488,10 @@ footer.site-footer {
     padding: 0.85rem 1rem;
   }
   .brand {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
+  }
+  .brand .anchor {
+    font-size: 1.3rem;
   }
   .main-content {
     padding: 1.25rem 0.85rem 2.5rem;

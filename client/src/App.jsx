@@ -9,7 +9,7 @@ export default function App() {
       <header className="top-nav no-print">
         <Link to="/" className="brand">
           <span className="anchor">⚓</span>
-          Captain's Log
+          High Slack Captain's Log
         </Link>
         <nav className="nav-actions">
           <Link to="/new" className="button">
