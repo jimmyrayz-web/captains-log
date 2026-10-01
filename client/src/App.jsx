@@ -27,7 +27,7 @@ export default function App() {
         </Link>
         <nav className="nav-actions">
           <Link to="/new" className="button">
-            + New Entry
+            + New
           </Link>
           {searchOpen && (
             <input
