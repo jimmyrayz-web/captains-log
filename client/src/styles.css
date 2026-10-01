@@ -84,6 +84,15 @@ a {
   line-height: 1;
 }
 
+.icon-button-search {
+  font-size: 1.6rem;
+}
+
+.icon-button-plus {
+  font-size: 2.4rem;
+  font-weight: 700;
+}
+
 .nav-search {
   border: 1.5px solid var(--teal-light);
   border-radius: 8px;

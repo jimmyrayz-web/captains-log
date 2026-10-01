@@ -38,13 +38,13 @@ export default function App() {
           )}
           <button
             type="button"
-            className="button icon-button"
+            className="button icon-button icon-button-search"
             onClick={toggleSearch}
             aria-label="Search entries"
           >
             🔍
           </button>
-          <Link to="/new" className="button icon-button" aria-label="New Entry">
+          <Link to="/new" className="button icon-button icon-button-plus" aria-label="New Entry">
             +
           </Link>
         </nav>
