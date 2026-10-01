@@ -266,6 +266,7 @@ a {
   font-weight: 700;
   color: var(--navy);
   font-size: 1.05rem;
+  margin-bottom: 0.3rem;
 }
 
 .entry-summary .route {
