@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listEntries } from '../api.js';
+
+const SCROLL_KEY = 'captains-log-list-scroll-y';
 
 function formatDate(dateStr) {
   const d = new Date(`${dateStr}T00:00:00`);
@@ -34,12 +36,25 @@ function matchesQuery(entry, query) {
 export default function ListView({ searchQuery = '' }) {
   const [entries, setEntries] = useState(null);
   const [error, setError] = useState('');
+  const restoredScroll = useRef(false);
 
   useEffect(() => {
     listEntries()
       .then(setEntries)
       .catch((err) => setError(err.message));
   }, []);
+
+  function saveScrollPosition() {
+    sessionStorage.setItem(SCROLL_KEY, String(window.scrollY));
+  }
+
+  useEffect(() => {
+    if (entries && !restoredScroll.current) {
+      restoredScroll.current = true;
+      const saved = sessionStorage.getItem(SCROLL_KEY);
+      if (saved) window.scrollTo(0, Number(saved));
+    }
+  }, [entries]);
 
   const filtered = entries?.filter((entry) => matchesQuery(entry, searchQuery)) ?? null;
 
@@ -76,7 +91,7 @@ export default function ListView({ searchQuery = '' }) {
         <ul className="entry-list">
           {filtered.map((entry) => (
             <li key={entry.id} className="card">
-              <Link to={`/entries/${entry.id}`} className="entry-card">
+              <Link to={`/entries/${entry.id}`} className="entry-card" onClick={saveScrollPosition}>
                 <div className="entry-summary">
                   <div className="date">{formatDate(entry.date)}</div>
                   {formatRoute(entry) && <div className="route">{formatRoute(entry)}</div>}
