@@ -78,10 +78,8 @@ export default function ListView({ searchQuery = '' }) {
             <li key={entry.id} className="card">
               <Link to={`/entries/${entry.id}`} className="entry-card">
                 <div className="entry-summary">
-                  <div className="date">
-                    {formatDate(entry.date)}
-                    {formatRoute(entry) && ` - ${formatRoute(entry)}`}
-                  </div>
+                  <div className="date">{formatDate(entry.date)}</div>
+                  {formatRoute(entry) && <div className="route">{formatRoute(entry)}</div>}
                   <div className="meta">
                     {entry.distance_nm != null && <span>{entry.distance_nm} nm</span>}
                     {entry.duration_hours != null && <span>{entry.duration_hours} hrs</span>}
