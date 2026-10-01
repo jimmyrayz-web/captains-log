@@ -6,7 +6,7 @@ import PhotoGallery from '../components/PhotoGallery.jsx';
 function formatDate(dateStr) {
   const d = new Date(`${dateStr}T00:00:00`);
   if (Number.isNaN(d.getTime())) return dateStr;
-  return d.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  return d.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
 }
 
 export default function EntryDetail() {
@@ -41,7 +41,7 @@ export default function EntryDetail() {
     <div className="card">
       <div className="top-actions no-print">
         <button type="button" className="button secondary" onClick={() => window.print()}>
-          Save as PDF
+          Print
         </button>
         <Link to={`/entries/${id}/edit`} className="button secondary">
           Edit
