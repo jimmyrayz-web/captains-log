@@ -92,6 +92,21 @@ export default function EntryForm() {
       {error && <div className="error-banner">{error}</div>}
 
       <form className="entry-form card" onSubmit={handleSubmit}>
+        <div className="form-top-actions">
+          <button type="submit" className="button" disabled={saving}>
+            {saving ? 'Saving…' : 'Save Entry'}
+          </button>
+          <button
+            type="button"
+            className="icon-close"
+            onClick={() => navigate(-1)}
+            aria-label="Close"
+            disabled={saving}
+          >
+            ✕
+          </button>
+        </div>
+
         <div className="form-grid">
           <div className="field">
             <label htmlFor="date">Date</label>
@@ -211,20 +226,6 @@ export default function EntryForm() {
         </div>
 
         {isEdit && <PhotoGallery entryId={id} photos={photos} onChange={setPhotos} />}
-
-        <div className="form-actions">
-          <button
-            type="button"
-            className="button secondary"
-            onClick={() => navigate(-1)}
-            disabled={saving}
-          >
-            Cancel
-          </button>
-          <button type="submit" className="button" disabled={saving}>
-            {saving ? 'Saving…' : 'Save Entry'}
-          </button>
-        </div>
       </form>
     </>
   );
