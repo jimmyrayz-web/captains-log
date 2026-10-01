@@ -46,7 +46,7 @@ export default function ListView({ searchQuery = '' }) {
   return (
     <>
       <div className="page-header">
-        <h1>Log Entries</h1>
+        <h1>Captain's Log</h1>
       </div>
 
       {error && <div className="error-banner">{error}</div>}

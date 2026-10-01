@@ -23,7 +23,7 @@ export default function App() {
       <header className="top-nav no-print">
         <Link to="/" className="brand">
           <span className="anchor">⚓</span>
-          HS Captain's Log
+          High Slack
         </Link>
         <nav className="nav-actions">
           {searchOpen && (
