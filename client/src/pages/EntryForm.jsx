@@ -87,13 +87,8 @@ export default function EntryForm() {
     <>
       <div className="page-header">
         <h1>{isEdit ? 'Edit Entry' : 'New Log Entry'}</h1>
-      </div>
-
-      {error && <div className="error-banner">{error}</div>}
-
-      <form className="entry-form card" onSubmit={handleSubmit}>
         <div className="form-top-actions">
-          <button type="submit" className="button" disabled={saving}>
+          <button type="submit" form="entry-form" className="button" disabled={saving}>
             {saving ? 'Saving…' : 'Save Entry'}
           </button>
           <button
@@ -106,7 +101,11 @@ export default function EntryForm() {
             ✕
           </button>
         </div>
+      </div>
 
+      {error && <div className="error-banner">{error}</div>}
+
+      <form id="entry-form" className="entry-form card" onSubmit={handleSubmit}>
         <div className="form-grid">
           <div className="field">
             <label htmlFor="date">Date</label>
