@@ -40,15 +40,20 @@ export default function EntryDetail() {
   return (
     <div className="card">
       <div className="top-actions no-print">
-        <button type="button" className="button secondary" onClick={() => window.print()}>
-          Print
+        <button type="button" className="icon-close" onClick={() => navigate(-1)} aria-label="Close">
+          ✕
         </button>
-        <Link to={`/entries/${id}/edit`} className="button secondary">
-          Edit
-        </Link>
-        <button type="button" className="button danger" onClick={handleDelete} disabled={deleting}>
-          {deleting ? 'Deleting…' : 'Delete'}
-        </button>
+        <div className="top-actions-right">
+          <button type="button" className="button secondary" onClick={() => window.print()}>
+            Print
+          </button>
+          <Link to={`/entries/${id}/edit`} className="button secondary">
+            Edit
+          </Link>
+          <button type="button" className="button danger" onClick={handleDelete} disabled={deleting}>
+            {deleting ? 'Deleting…' : 'Delete'}
+          </button>
+        </div>
       </div>
 
       <div className="detail-header">
