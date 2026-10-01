@@ -69,6 +69,38 @@ a {
   font-size: 1.6rem;
 }
 
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon-button {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  justify-content: center;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.nav-search {
+  border: 1.5px solid var(--teal-light);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--ink);
+  width: 160px;
+  max-width: 45vw;
+}
+
+.nav-search:focus {
+  outline: none;
+  border-color: var(--teal-light);
+  box-shadow: 0 0 0 3px rgba(47, 163, 163, 0.25);
+}
+
 .nav-actions a.button,
 .button {
   display: inline-flex;

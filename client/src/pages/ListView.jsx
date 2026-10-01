@@ -15,7 +15,23 @@ function formatRoute(entry) {
   return entry.departure_point || entry.arrival_point || '';
 }
 
-export default function ListView() {
+function matchesQuery(entry, query) {
+  if (!query.trim()) return true;
+  const haystack = [
+    entry.weather,
+    entry.departure_point,
+    entry.arrival_point,
+    entry.crew?.join(' '),
+    entry.maintenance_notes,
+    entry.notes,
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+  return haystack.includes(query.trim().toLowerCase());
+}
+
+export default function ListView({ searchQuery = '' }) {
   const [entries, setEntries] = useState(null);
   const [error, setError] = useState('');
 
@@ -24,6 +40,8 @@ export default function ListView() {
       .then(setEntries)
       .catch((err) => setError(err.message));
   }, []);
+
+  const filtered = entries?.filter((entry) => matchesQuery(entry, searchQuery)) ?? null;
 
   return (
     <>
@@ -47,9 +65,16 @@ export default function ListView() {
         </div>
       )}
 
-      {entries && entries.length > 0 && (
+      {entries && entries.length > 0 && filtered.length === 0 && (
+        <div className="card empty-state">
+          <span className="anchor">🔍</span>
+          No entries match "{searchQuery}".
+        </div>
+      )}
+
+      {filtered && filtered.length > 0 && (
         <ul className="entry-list">
-          {entries.map((entry) => (
+          {filtered.map((entry) => (
             <li key={entry.id} className="card">
               <Link to={`/entries/${entry.id}`} className="entry-card">
                 <div className="entry-summary">
