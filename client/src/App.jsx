@@ -3,104 +3,7 @@ import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom'
 import ListView from './pages/ListView.jsx';
 import EntryForm from './pages/EntryForm.jsx';
 import EntryDetail from './pages/EntryDetail.jsx';
-import { listEntries, createEntry } from './api.js';
-
-const CSV_COLUMNS = [
-  ['date', 'Date'],
-  ['departure_point', 'Departure'],
-  ['arrival_point', 'Arrival'],
-  ['distance_nm', 'Distance (nm)'],
-  ['duration_hours', 'Duration (hrs)'],
-  ['weather', 'Weather'],
-  ['engine_hours', 'Engine Hours'],
-  ['fuel_added_gal', 'Fuel Added (gal)'],
-  ['oil_checked', 'Departure Checklist Complete'],
-  ['crew', 'Crew'],
-  ['maintenance_notes', 'Maintenance Notes'],
-  ['notes', 'Notes'],
-];
-
-function csvCell(value) {
-  const str = value == null ? '' : String(value);
-  return /[",\n]/.test(str) ? `"${str.replace(/"/g, '""')}"` : str;
-}
-
-function entriesToCsv(entries) {
-  const header = CSV_COLUMNS.map(([, label]) => csvCell(label)).join(',');
-  const rows = entries.map((entry) =>
-    CSV_COLUMNS.map(([key]) => {
-      let value = entry[key];
-      if (key === 'crew') value = (value || []).join('; ');
-      if (key === 'oil_checked') value = value ? 'Yes' : 'No';
-      return csvCell(value);
-    }).join(',')
-  );
-  return [header, ...rows].join('\n');
-}
-
-// Parses RFC4180-style CSV: quoted fields may contain commas, escaped
-// quotes (""), and newlines.
-function parseCsv(text) {
-  const rows = [];
-  let row = [];
-  let field = '';
-  let inQuotes = false;
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    if (inQuotes) {
-      if (char === '"' && text[i + 1] === '"') {
-        field += '"';
-        i++;
-      } else if (char === '"') {
-        inQuotes = false;
-      } else {
-        field += char;
-      }
-    } else if (char === '"') {
-      inQuotes = true;
-    } else if (char === ',') {
-      row.push(field);
-      field = '';
-    } else if (char === '\r') {
-      // skip; \n (handled below) ends the row
-    } else if (char === '\n') {
-      row.push(field);
-      rows.push(row);
-      row = [];
-      field = '';
-    } else {
-      field += char;
-    }
-  }
-  if (field !== '' || row.length > 0) {
-    row.push(field);
-    rows.push(row);
-  }
-  return rows.filter((r) => !(r.length === 1 && r[0] === ''));
-}
-
-const CSV_LABEL_TO_KEY = Object.fromEntries(CSV_COLUMNS.map(([key, label]) => [label, key]));
-
-function csvRowToPayload(record) {
-  const num = (v) => (v && v.trim() !== '' ? Number(v) : null);
-  return {
-    date: record.date || '',
-    departure_point: record.departure_point || '',
-    arrival_point: record.arrival_point || '',
-    weather: record.weather || '',
-    maintenance_notes: record.maintenance_notes || '',
-    notes: record.notes || '',
-    engine_hours: num(record.engine_hours),
-    distance_nm: num(record.distance_nm),
-    duration_hours: num(record.duration_hours),
-    fuel_added_gal: num(record.fuel_added_gal),
-    oil_checked: (record.oil_checked || '').trim().toLowerCase() === 'yes',
-    crew: (record.crew || '')
-      .split(';')
-      .map((s) => s.trim())
-      .filter(Boolean),
-  };
-}
+import { exportEntriesZip, importEntriesZip } from './exportImport.js';
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -139,13 +42,11 @@ export default function App() {
   async function handleExport() {
     setMenuOpen(false);
     try {
-      const entries = await listEntries();
-      const csv = entriesToCsv(entries);
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const blob = await exportEntriesZip();
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `captains-log-export-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.download = `captains-log-export-${new Date().toISOString().slice(0, 10)}.zip`;
       link.click();
       URL.revokeObjectURL(url);
     } catch (err) {
@@ -164,37 +65,18 @@ export default function App() {
     if (!file) return;
 
     try {
-      const text = await file.text();
-      const rows = parseCsv(text);
-      if (rows.length < 2) {
+      const result = await importEntriesZip(file);
+      if (result.empty) {
         alert('No data rows found in that file.');
         return;
       }
-      const [headerRow, ...dataRows] = rows;
-      const keysByColumn = headerRow.map((label) => CSV_LABEL_TO_KEY[label.trim()]);
-
-      let imported = 0;
-      let skipped = 0;
-      for (const row of dataRows) {
-        const record = {};
-        keysByColumn.forEach((key, i) => {
-          if (key) record[key] = row[i] ?? '';
-        });
-        if (!record.date) {
-          skipped++;
-          continue;
-        }
-        try {
-          await createEntry(csvRowToPayload(record));
-          imported++;
-        } catch {
-          skipped++;
-        }
-      }
-
       setListKey((k) => k + 1);
       navigate('/');
-      alert(`Imported ${imported} ${imported === 1 ? 'entry' : 'entries'}.${skipped ? ` Skipped ${skipped}.` : ''}`);
+      alert(
+        `Imported ${result.imported} ${result.imported === 1 ? 'entry' : 'entries'}` +
+          `${result.photosImported ? ` with ${result.photosImported} photo${result.photosImported === 1 ? '' : 's'}` : ''}.` +
+          `${result.skipped ? ` Skipped ${result.skipped}.` : ''}`
+      );
     } catch (err) {
       alert(`Import failed: ${err.message}`);
     }
@@ -257,7 +139,7 @@ export default function App() {
           <input
             ref={importInputRef}
             type="file"
-            accept=".csv,text/csv"
+            accept=".csv,.zip,text/csv,application/zip"
             style={{ display: 'none' }}
             onChange={handleImportFile}
           />
