@@ -87,25 +87,20 @@ export default function EntryForm() {
     <>
       <div className="page-header">
         <h1>{isEdit ? 'Edit Entry' : 'New Log Entry'}</h1>
-        <div className="form-top-actions">
-          <button type="submit" form="entry-form" className="button" disabled={saving}>
-            {saving ? 'Saving…' : 'Save Entry'}
-          </button>
-          <button
-            type="button"
-            className="icon-close"
-            onClick={() => navigate(-1)}
-            aria-label="Close"
-            disabled={saving}
-          >
-            ✕
-          </button>
-        </div>
+        <button
+          type="button"
+          className="icon-close"
+          onClick={() => navigate(-1)}
+          aria-label="Close"
+          disabled={saving}
+        >
+          ✕
+        </button>
       </div>
 
       {error && <div className="error-banner">{error}</div>}
 
-      <form id="entry-form" className="entry-form card" onSubmit={handleSubmit}>
+      <form className="entry-form card" onSubmit={handleSubmit}>
         <div className="form-grid">
           <div className="field">
             <label htmlFor="date">Date</label>
@@ -225,6 +220,12 @@ export default function EntryForm() {
         </div>
 
         {isEdit && <PhotoGallery entryId={id} photos={photos} onChange={setPhotos} />}
+
+        <div className="form-bottom-actions">
+          <button type="submit" className="button" disabled={saving}>
+            {saving ? 'Saving…' : 'Save Entry'}
+          </button>
+        </div>
       </form>
     </>
   );
