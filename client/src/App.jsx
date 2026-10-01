@@ -26,6 +26,9 @@ export default function App() {
           High Slack
         </Link>
         <nav className="nav-actions">
+          <Link to="/new" className="button">
+            + New Entry
+          </Link>
           {searchOpen && (
             <input
               type="text"
@@ -44,9 +47,6 @@ export default function App() {
           >
             🔍
           </button>
-          <Link to="/new" className="button">
-            + New Entry
-          </Link>
         </nav>
       </header>
 
