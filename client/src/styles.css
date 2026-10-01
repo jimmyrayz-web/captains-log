@@ -84,8 +84,14 @@ a {
   line-height: 1;
 }
 
-.icon-button-search {
-  font-size: 1.6rem;
+.icon-button-menu {
+  font-size: 1.4rem;
+}
+
+.nav-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .nav-search {
@@ -96,13 +102,57 @@ a {
   background: rgba(255, 255, 255, 0.95);
   color: var(--ink);
   width: 160px;
-  max-width: 45vw;
+  max-width: 40vw;
 }
 
 .nav-search:focus {
   outline: none;
   border-color: var(--teal-light);
   box-shadow: 0 0 0 3px rgba(47, 163, 163, 0.25);
+}
+
+.nav-search-close {
+  background: transparent;
+  border: none;
+  color: var(--cream);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.3rem;
+  line-height: 1;
+}
+
+.nav-menu {
+  position: relative;
+}
+
+.nav-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: var(--cream);
+  border: 1px solid var(--sand-dark);
+  border-radius: 10px;
+  box-shadow: 0 6px 16px var(--shadow);
+  min-width: 150px;
+  overflow: hidden;
+  z-index: 20;
+}
+
+.nav-menu-dropdown button {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--navy);
+  cursor: pointer;
+}
+
+.nav-menu-dropdown button:hover {
+  background: rgba(31, 122, 122, 0.12);
 }
 
 .nav-actions a.button,

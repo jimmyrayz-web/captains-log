@@ -1,21 +1,39 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import ListView from './pages/ListView.jsx';
 import EntryForm from './pages/EntryForm.jsx';
 import EntryDetail from './pages/EntryDetail.jsx';
 
 export default function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
+  const menuRef = useRef(null);
 
-  function toggleSearch() {
-    if (!searchOpen && location.pathname !== '/') {
+  useEffect(() => {
+    if (!menuOpen) return;
+    function handleClickOutside(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [menuOpen]);
+
+  function openSearch() {
+    if (location.pathname !== '/') {
       navigate('/');
     }
-    if (searchOpen) setSearchQuery('');
-    setSearchOpen((open) => !open);
+    setSearchOpen(true);
+    setMenuOpen(false);
+  }
+
+  function closeSearch() {
+    setSearchOpen(false);
+    setSearchQuery('');
   }
 
   return (
@@ -30,23 +48,42 @@ export default function App() {
             + New
           </Link>
           {searchOpen && (
-            <input
-              type="text"
-              className="nav-search"
-              placeholder="Search entries…"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              autoFocus
-            />
+            <div className="nav-search-wrap">
+              <input
+                type="text"
+                className="nav-search"
+                placeholder="Search entries…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                autoFocus
+              />
+              <button
+                type="button"
+                className="nav-search-close"
+                onClick={closeSearch}
+                aria-label="Close search"
+              >
+                ✕
+              </button>
+            </div>
           )}
-          <button
-            type="button"
-            className="button icon-button icon-button-search"
-            onClick={toggleSearch}
-            aria-label="Search entries"
-          >
-            🔍
-          </button>
+          <div className="nav-menu" ref={menuRef}>
+            <button
+              type="button"
+              className="button icon-button icon-button-menu"
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-label="Menu"
+            >
+              ☰
+            </button>
+            {menuOpen && (
+              <div className="nav-menu-dropdown">
+                <button type="button" onClick={openSearch}>
+                  🔍 Search
+                </button>
+              </div>
+            )}
+          </div>
         </nav>
       </header>
 
