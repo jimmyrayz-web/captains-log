@@ -28,7 +28,7 @@ export default function ListView() {
   return (
     <>
       <div className="page-header">
-        <h1>Trip Log</h1>
+        <h1>Log Entries</h1>
       </div>
 
       {error && <div className="error-banner">{error}</div>}
