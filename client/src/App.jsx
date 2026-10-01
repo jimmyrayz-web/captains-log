@@ -44,8 +44,8 @@ export default function App() {
           >
             🔍
           </button>
-          <Link to="/new" className="button icon-button icon-button-plus" aria-label="New Entry">
-            +
+          <Link to="/new" className="button">
+            + New Entry
           </Link>
         </nav>
       </header>
