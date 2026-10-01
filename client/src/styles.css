@@ -42,7 +42,7 @@ a {
 .top-nav {
   background: linear-gradient(180deg, var(--navy) 0%, var(--navy-dark) 100%);
   color: var(--cream);
-  padding: 1rem 1.5rem;
+  padding: calc(1rem + env(safe-area-inset-top)) 1.5rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -545,7 +545,7 @@ textarea {
 
 footer.site-footer {
   text-align: center;
-  padding: 1.25rem;
+  padding: 1.25rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom));
   color: #8a9aa8;
   font-size: 0.85rem;
 }
@@ -576,7 +576,7 @@ footer.site-footer {
 
 @media (max-width: 600px) {
   .top-nav {
-    padding: 0.85rem 1rem;
+    padding: calc(0.85rem + env(safe-area-inset-top)) 1rem 0.85rem;
   }
   .brand {
     font-size: 1.45rem;
