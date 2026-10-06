@@ -11,7 +11,7 @@ const EMPTY = {
   arrival_point: '',
   distance_nm: '',
   duration_hours: '',
-  crew: '',
+  crew: 'James, Steve',
   fuel_added_gal: '',
   oil_checked: false,
   maintenance_notes: '',
