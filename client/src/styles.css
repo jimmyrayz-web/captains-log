@@ -477,6 +477,10 @@ form.entry-form {
   flex: 1;
 }
 
+.modal-footer .modal-footer-clear {
+  flex: none;
+}
+
 textarea {
   resize: vertical;
   min-height: 70px;
