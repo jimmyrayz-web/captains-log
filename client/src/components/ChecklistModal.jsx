@@ -85,7 +85,7 @@ export default function ChecklistModal({ checked, onToggleItem, onToggleGroup, o
         </div>
 
         <div className="modal-footer">
-          <button type="button" className="button secondary modal-footer-clear" onClick={onClear}>
+          <button type="button" className="button secondary" onClick={onClear}>
             Clear All
           </button>
           <button type="button" className="button" disabled={!allComplete} onClick={onConfirm}>
