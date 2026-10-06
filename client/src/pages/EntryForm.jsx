@@ -3,6 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getEntry, createEntry, updateEntry } from '../api.js';
 import PhotoGallery from '../components/PhotoGallery.jsx';
 
+function computeDurationHours(departureTime, arrivalTime) {
+  const [dh, dm] = departureTime.split(':').map(Number);
+  const [ah, am] = arrivalTime.split(':').map(Number);
+  let minutes = ah * 60 + am - (dh * 60 + dm);
+  if (minutes < 0) minutes += 24 * 60; // arrival past midnight
+  return String(Math.round((minutes / 60) * 100) / 100);
+}
+
 const EMPTY = {
   date: new Date().toISOString().slice(0, 10),
   weather: '',
@@ -58,6 +66,16 @@ export default function EntryForm() {
 
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
+  }
+
+  function updateTime(field, value) {
+    setForm((f) => {
+      const next = { ...f, [field]: value };
+      if (next.departure_time && next.arrival_time) {
+        next.duration_hours = computeDurationHours(next.departure_time, next.arrival_time);
+      }
+      return next;
+    });
   }
 
   async function handleSubmit(e) {
@@ -151,7 +169,7 @@ export default function EntryForm() {
               id="departure_time"
               type="time"
               value={form.departure_time}
-              onChange={(e) => update('departure_time', e.target.value)}
+              onChange={(e) => updateTime('departure_time', e.target.value)}
             />
           </div>
           <div className="field">
@@ -169,7 +187,7 @@ export default function EntryForm() {
               id="arrival_time"
               type="time"
               value={form.arrival_time}
-              onChange={(e) => update('arrival_time', e.target.value)}
+              onChange={(e) => updateTime('arrival_time', e.target.value)}
             />
           </div>
           <div className="field">
