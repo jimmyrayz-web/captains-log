@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getEntry, createEntry, updateEntry } from '../api.js';
 import PhotoGallery from '../components/PhotoGallery.jsx';
+import ChecklistModal, { CHECKLIST_GROUPS } from '../components/ChecklistModal.jsx';
 
 function computeDurationHours(departureTime, arrivalTime) {
   const [dh, dm] = departureTime.split(':').map(Number);
@@ -39,6 +40,12 @@ export default function EntryForm() {
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [checklistOpen, setChecklistOpen] = useState(false);
+  const [checklistChecked, setChecklistChecked] = useState({});
+
+  useEffect(() => {
+    setChecklistChecked({});
+  }, [id]);
 
   useEffect(() => {
     if (!isEdit) return;
@@ -80,6 +87,25 @@ export default function EntryForm() {
       }
       return next;
     });
+  }
+
+  function toggleChecklistItem(groupIndex, itemIndex, isChecked) {
+    setChecklistChecked((prev) => ({ ...prev, [`${groupIndex}-${itemIndex}`]: isChecked }));
+  }
+
+  function toggleChecklistGroup(groupIndex, isChecked) {
+    setChecklistChecked((prev) => {
+      const next = { ...prev };
+      CHECKLIST_GROUPS[groupIndex].items.forEach((_, itemIndex) => {
+        next[`${groupIndex}-${itemIndex}`] = isChecked;
+      });
+      return next;
+    });
+  }
+
+  function handleChecklistConfirm() {
+    update('oil_checked', true);
+    setChecklistOpen(false);
   }
 
   async function handleSubmit(e) {
@@ -263,7 +289,9 @@ export default function EntryForm() {
               checked={form.oil_checked}
               onChange={(e) => update('oil_checked', e.target.checked)}
             />
-            <label htmlFor="oil_checked">Departure Checklist</label>
+            <button type="button" className="checklist-link" onClick={() => setChecklistOpen(true)}>
+              Departure Checklist
+            </button>
           </div>
         </div>
 
@@ -293,6 +321,16 @@ export default function EntryForm() {
           </button>
         </div>
       </form>
+
+      {checklistOpen && (
+        <ChecklistModal
+          checked={checklistChecked}
+          onToggleItem={toggleChecklistItem}
+          onToggleGroup={toggleChecklistGroup}
+          onConfirm={handleChecklistConfirm}
+          onClose={() => setChecklistOpen(false)}
+        />
+      )}
     </>
   );
 }
