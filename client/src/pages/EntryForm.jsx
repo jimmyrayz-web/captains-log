@@ -17,8 +17,10 @@ const EMPTY = {
   engine_hours: '',
   departure_point: '',
   departure_time: '',
+  departure_fuel: '',
   arrival_point: '',
   arrival_time: '',
+  arrival_fuel: '',
   distance_nm: '',
   duration_hours: '',
   crew: 'James, Steve',
@@ -48,8 +50,10 @@ export default function EntryForm() {
           engine_hours: entry.engine_hours ?? '',
           departure_point: entry.departure_point || '',
           departure_time: entry.departure_time || '',
+          departure_fuel: entry.departure_fuel ?? '',
           arrival_point: entry.arrival_point || '',
           arrival_time: entry.arrival_time || '',
+          arrival_fuel: entry.arrival_fuel ?? '',
           distance_nm: entry.distance_nm ?? '',
           duration_hours: entry.duration_hours ?? '',
           crew: (entry.crew || []).join(', '),
@@ -89,6 +93,8 @@ export default function EntryForm() {
         distance_nm: form.distance_nm === '' ? null : Number(form.distance_nm),
         duration_hours: form.duration_hours === '' ? null : Number(form.duration_hours),
         fuel_added_gal: form.fuel_added_gal === '' ? null : Number(form.fuel_added_gal),
+        departure_fuel: form.departure_fuel === '' ? null : Number(form.departure_fuel),
+        arrival_fuel: form.arrival_fuel === '' ? null : Number(form.arrival_fuel),
       };
       if (isEdit) {
         await updateEntry(id, payload);
@@ -173,6 +179,16 @@ export default function EntryForm() {
             />
           </div>
           <div className="field">
+            <label htmlFor="departure_fuel">Departure Fuel</label>
+            <input
+              id="departure_fuel"
+              type="number"
+              step="0.1"
+              value={form.departure_fuel}
+              onChange={(e) => update('departure_fuel', e.target.value)}
+            />
+          </div>
+          <div className="field">
             <label htmlFor="arrival_point">Arrival Point</label>
             <input
               id="arrival_point"
@@ -188,6 +204,16 @@ export default function EntryForm() {
               type="time"
               value={form.arrival_time}
               onChange={(e) => updateTime('arrival_time', e.target.value)}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="arrival_fuel">Arrival Fuel</label>
+            <input
+              id="arrival_fuel"
+              type="number"
+              step="0.1"
+              value={form.arrival_fuel}
+              onChange={(e) => update('arrival_fuel', e.target.value)}
             />
           </div>
           <div className="field">

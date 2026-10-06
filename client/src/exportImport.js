@@ -5,8 +5,10 @@ export const CSV_COLUMNS = [
   ['date', 'Date'],
   ['departure_point', 'Departure'],
   ['departure_time', 'Departure Time'],
+  ['departure_fuel', 'Departure Fuel'],
   ['arrival_point', 'Arrival'],
   ['arrival_time', 'Arrival Time'],
+  ['arrival_fuel', 'Arrival Fuel'],
   ['distance_nm', 'Distance (nm)'],
   ['duration_hours', 'Duration (hrs)'],
   ['weather', 'Weather'],
@@ -97,6 +99,8 @@ function csvRowToPayload(record) {
     distance_nm: num(record.distance_nm),
     duration_hours: num(record.duration_hours),
     fuel_added_gal: num(record.fuel_added_gal),
+    departure_fuel: num(record.departure_fuel),
+    arrival_fuel: num(record.arrival_fuel),
     oil_checked: (record.oil_checked || '').trim().toLowerCase() === 'yes',
     crew: (record.crew || '')
       .split(';')

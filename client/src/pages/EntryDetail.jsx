@@ -94,6 +94,12 @@ export default function EntryDetail() {
               <span className="value">{formatTime(entry.departure_time)}</span>
             </div>
           )}
+          {entry.departure_fuel != null && (
+            <div className="stat">
+              <span className="label">Departure Fuel</span>
+              <span className="value">{entry.departure_fuel}</span>
+            </div>
+          )}
           {entry.arrival_point && (
             <div className="stat">
               <span className="label">Arrival</span>
@@ -104,6 +110,12 @@ export default function EntryDetail() {
             <div className="stat">
               <span className="label">Arrival Time</span>
               <span className="value">{formatTime(entry.arrival_time)}</span>
+            </div>
+          )}
+          {entry.arrival_fuel != null && (
+            <div className="stat">
+              <span className="label">Arrival Fuel</span>
+              <span className="value">{entry.arrival_fuel}</span>
             </div>
           )}
           {entry.distance_nm != null && (
