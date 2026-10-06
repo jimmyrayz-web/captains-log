@@ -41,7 +41,7 @@ export function isChecklistComplete(checked) {
   return CHECKLIST_GROUPS.every((group, gi) => group.items.every((_, ii) => checked[`${gi}-${ii}`]));
 }
 
-export default function ChecklistModal({ checked, onToggleItem, onToggleGroup, onConfirm, onClose }) {
+export default function ChecklistModal({ checked, onToggleItem, onToggleGroup, onConfirm, onClear, onClose }) {
   const allComplete = isChecklistComplete(checked);
 
   return (
@@ -85,6 +85,9 @@ export default function ChecklistModal({ checked, onToggleItem, onToggleGroup, o
         </div>
 
         <div className="modal-footer">
+          <button type="button" className="button secondary" onClick={onClear}>
+            Clear All
+          </button>
           <button type="button" className="button" disabled={!allComplete} onClick={onConfirm}>
             {allComplete ? 'Done — Mark Checklist Complete' : 'Check off all items to continue'}
           </button>

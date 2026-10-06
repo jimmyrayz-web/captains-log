@@ -108,6 +108,10 @@ export default function EntryForm() {
     setChecklistOpen(false);
   }
 
+  function handleChecklistClear() {
+    setChecklistChecked({});
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
@@ -328,6 +332,7 @@ export default function EntryForm() {
           onToggleItem={toggleChecklistItem}
           onToggleGroup={toggleChecklistGroup}
           onConfirm={handleChecklistConfirm}
+          onClear={handleChecklistClear}
           onClose={() => setChecklistOpen(false)}
         />
       )}
