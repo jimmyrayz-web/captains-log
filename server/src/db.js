@@ -28,7 +28,9 @@ await db.execute(`
     weather TEXT,
     engine_hours REAL,
     departure_point TEXT,
+    departure_time TEXT,
     arrival_point TEXT,
+    arrival_time TEXT,
     distance_nm REAL,
     duration_hours REAL,
     crew TEXT,
@@ -40,6 +42,19 @@ await db.execute(`
     updated_at TEXT NOT NULL DEFAULT (datetime('now'))
   )
 `);
+
+// Migration for databases created before departure_time/arrival_time
+// existed: CREATE TABLE IF NOT EXISTS won't retrofit columns onto an
+// already-existing table, so add them here if missing.
+const existingColumns = new Set(
+  (await db.execute('PRAGMA table_info(entries)')).rows.map((row) => row.name)
+);
+if (!existingColumns.has('departure_time')) {
+  await db.execute('ALTER TABLE entries ADD COLUMN departure_time TEXT');
+}
+if (!existingColumns.has('arrival_time')) {
+  await db.execute('ALTER TABLE entries ADD COLUMN arrival_time TEXT');
+}
 
 await db.execute(`
   CREATE TABLE IF NOT EXISTS photos (

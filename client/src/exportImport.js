@@ -4,7 +4,9 @@ import { listEntries, getEntry, createEntry, uploadPhotos, photoUrl } from './ap
 export const CSV_COLUMNS = [
   ['date', 'Date'],
   ['departure_point', 'Departure'],
+  ['departure_time', 'Departure Time'],
   ['arrival_point', 'Arrival'],
+  ['arrival_time', 'Arrival Time'],
   ['distance_nm', 'Distance (nm)'],
   ['duration_hours', 'Duration (hrs)'],
   ['weather', 'Weather'],
@@ -85,7 +87,9 @@ function csvRowToPayload(record) {
   return {
     date: record.date || '',
     departure_point: record.departure_point || '',
+    departure_time: record.departure_time || '',
     arrival_point: record.arrival_point || '',
+    arrival_time: record.arrival_time || '',
     weather: record.weather || '',
     maintenance_notes: record.maintenance_notes || '',
     notes: record.notes || '',

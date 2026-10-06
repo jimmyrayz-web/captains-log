@@ -8,7 +8,9 @@ const EMPTY = {
   weather: '',
   engine_hours: '',
   departure_point: '',
+  departure_time: '',
   arrival_point: '',
+  arrival_time: '',
   distance_nm: '',
   duration_hours: '',
   crew: 'James, Steve',
@@ -37,7 +39,9 @@ export default function EntryForm() {
           weather: entry.weather || '',
           engine_hours: entry.engine_hours ?? '',
           departure_point: entry.departure_point || '',
+          departure_time: entry.departure_time || '',
           arrival_point: entry.arrival_point || '',
+          arrival_time: entry.arrival_time || '',
           distance_nm: entry.distance_nm ?? '',
           duration_hours: entry.duration_hours ?? '',
           crew: (entry.crew || []).join(', '),
@@ -142,12 +146,30 @@ export default function EntryForm() {
             />
           </div>
           <div className="field">
+            <label htmlFor="departure_time">Departure Time</label>
+            <input
+              id="departure_time"
+              type="time"
+              value={form.departure_time}
+              onChange={(e) => update('departure_time', e.target.value)}
+            />
+          </div>
+          <div className="field">
             <label htmlFor="arrival_point">Arrival Point</label>
             <input
               id="arrival_point"
               type="text"
               value={form.arrival_point}
               onChange={(e) => update('arrival_point', e.target.value)}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="arrival_time">Arrival Time</label>
+            <input
+              id="arrival_time"
+              type="time"
+              value={form.arrival_time}
+              onChange={(e) => update('arrival_time', e.target.value)}
             />
           </div>
           <div className="field">

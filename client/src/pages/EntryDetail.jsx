@@ -9,6 +9,12 @@ function formatDate(dateStr) {
   return d.toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' });
 }
 
+function formatTime(timeStr) {
+  const d = new Date(`2000-01-01T${timeStr}`);
+  if (Number.isNaN(d.getTime())) return timeStr;
+  return d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+}
+
 export default function EntryDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -82,10 +88,22 @@ export default function EntryDetail() {
               <span className="value">{entry.departure_point}</span>
             </div>
           )}
+          {entry.departure_time && (
+            <div className="stat">
+              <span className="label">Departure Time</span>
+              <span className="value">{formatTime(entry.departure_time)}</span>
+            </div>
+          )}
           {entry.arrival_point && (
             <div className="stat">
               <span className="label">Arrival</span>
               <span className="value">{entry.arrival_point}</span>
+            </div>
+          )}
+          {entry.arrival_time && (
+            <div className="stat">
+              <span className="label">Arrival Time</span>
+              <span className="value">{formatTime(entry.arrival_time)}</span>
             </div>
           )}
           {entry.distance_nm != null && (
