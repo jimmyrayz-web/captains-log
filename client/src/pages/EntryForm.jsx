@@ -112,6 +112,15 @@ export default function EntryForm() {
     setChecklistChecked({});
   }
 
+  function handleOilCheckedChange(e) {
+    if (e.target.checked) {
+      // Checking it requires completing the checklist; unchecking stays direct.
+      setChecklistOpen(true);
+    } else {
+      update('oil_checked', false);
+    }
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
@@ -291,7 +300,7 @@ export default function EntryForm() {
               id="oil_checked"
               type="checkbox"
               checked={form.oil_checked}
-              onChange={(e) => update('oil_checked', e.target.checked)}
+              onChange={handleOilCheckedChange}
             />
             <button type="button" className="checklist-link" onClick={() => setChecklistOpen(true)}>
               Departure Checklist
