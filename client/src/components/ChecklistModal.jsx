@@ -89,7 +89,7 @@ export default function ChecklistModal({ checked, onToggleItem, onToggleGroup, o
             Clear All
           </button>
           <button type="button" className="button" disabled={!allComplete} onClick={onConfirm}>
-            {allComplete ? 'Done — Mark Checklist Complete' : 'Check off all items to continue'}
+            {allComplete ? 'Done — Mark Complete' : 'Check off all items to continue'}
           </button>
         </div>
       </div>
