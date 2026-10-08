@@ -334,7 +334,7 @@ form.entry-form {
 }
 
 .field input {
-  height: 2.4rem;
+  min-height: 2.75rem;
 }
 
 .field input:focus,
@@ -354,6 +354,7 @@ form.entry-form {
 .field.checkbox input {
   width: 1.15rem;
   height: 1.15rem;
+  min-height: 0;
 }
 
 .checklist-link {
