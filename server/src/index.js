@@ -38,6 +38,8 @@ const ENTRY_FIELDS = [
   'duration_hours',
   'crew',
   'fuel_added_gal',
+  'gps_lat',
+  'gps_lng',
   'oil_checked',
   'maintenance_notes',
   'notes',

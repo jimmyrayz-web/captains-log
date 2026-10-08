@@ -38,6 +38,8 @@ await db.execute(`
     duration_hours REAL,
     crew TEXT,
     fuel_added_gal REAL,
+    gps_lat REAL,
+    gps_lng REAL,
     oil_checked INTEGER NOT NULL DEFAULT 0,
     maintenance_notes TEXT,
     notes TEXT,
@@ -58,6 +60,8 @@ const newColumns = [
   ['departure_fuel', 'REAL'],
   ['arrival_fuel', 'REAL'],
   ['fuel_consumed', 'REAL'],
+  ['gps_lat', 'REAL'],
+  ['gps_lng', 'REAL'],
 ];
 for (const [name, type] of newColumns) {
   if (!existingColumns.has(name)) {

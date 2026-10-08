@@ -4,6 +4,7 @@ import ListView from './pages/ListView.jsx';
 import EntryForm from './pages/EntryForm.jsx';
 import EntryDetail from './pages/EntryDetail.jsx';
 import Reports from './pages/Reports.jsx';
+import MapPage from './pages/Map.jsx';
 import { exportEntriesZip, importEntriesZip } from './exportImport.js';
 
 export default function App() {
@@ -63,6 +64,11 @@ export default function App() {
   function openReports() {
     setMenuOpen(false);
     navigate('/reports');
+  }
+
+  function openMap() {
+    setMenuOpen(false);
+    navigate('/map');
   }
 
   async function handleImportFile(e) {
@@ -136,6 +142,9 @@ export default function App() {
                 <button type="button" onClick={openReports}>
                   📊 Reports
                 </button>
+                <button type="button" onClick={openMap}>
+                  🗺️ Map
+                </button>
                 <button type="button" onClick={handleExport}>
                   ⬇️ Export
                 </button>
@@ -162,6 +171,7 @@ export default function App() {
           <Route path="/entries/:id" element={<EntryDetail />} />
           <Route path="/entries/:id/edit" element={<EntryForm />} />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/map" element={<MapPage />} />
         </Routes>
       </main>
 

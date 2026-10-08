@@ -538,6 +538,18 @@ textarea {
   gap: 1.5rem;
 }
 
+.map-card {
+  padding: 0.6rem;
+  overflow: hidden;
+}
+
+.map-container {
+  width: 100%;
+  height: 65vh;
+  min-height: 320px;
+  border-radius: 8px;
+}
+
 .stat-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));

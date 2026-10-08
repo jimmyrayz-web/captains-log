@@ -15,6 +15,8 @@ export const CSV_COLUMNS = [
   ['weather', 'Weather'],
   ['engine_hours', 'Engine Hours'],
   ['fuel_added_gal', 'Fuel Added (gal)'],
+  ['gps_lat', 'GPS Latitude'],
+  ['gps_lng', 'GPS Longitude'],
   ['oil_checked', 'Departure Checklist Complete'],
   ['crew', 'Crew'],
   ['maintenance_notes', 'Maintenance Notes'],
@@ -103,6 +105,8 @@ function csvRowToPayload(record) {
     departure_fuel: num(record.departure_fuel),
     arrival_fuel: num(record.arrival_fuel),
     fuel_consumed: num(record.fuel_consumed),
+    gps_lat: num(record.gps_lat),
+    gps_lng: num(record.gps_lng),
     oil_checked: (record.oil_checked || '').trim().toLowerCase() === 'yes',
     crew: (record.crew || '')
       .split(';')

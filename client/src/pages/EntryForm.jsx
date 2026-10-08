@@ -32,6 +32,8 @@ const EMPTY = {
   duration_hours: '',
   crew: 'James, Steve',
   fuel_added_gal: '0',
+  gps_lat: null,
+  gps_lng: null,
   oil_checked: false,
   maintenance_notes: '',
   notes: '',
@@ -54,6 +56,21 @@ export default function EntryForm() {
   }, [id]);
 
   useEffect(() => {
+    // Silently capture the boat's GPS location for new entries, used to
+    // plot trips on the Map page. Not shown anywhere in this form; if the
+    // browser has no geolocation support or the user denies permission,
+    // the entry just saves without a location.
+    if (isEdit || !navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setForm((f) => ({ ...f, gps_lat: pos.coords.latitude, gps_lng: pos.coords.longitude }));
+      },
+      () => {},
+      { timeout: 10000, maximumAge: 300000 }
+    );
+  }, [isEdit]);
+
+  useEffect(() => {
     if (!isEdit) return;
     getEntry(id)
       .then((entry) => {
@@ -72,6 +89,8 @@ export default function EntryForm() {
           duration_hours: entry.duration_hours ?? '',
           crew: (entry.crew || []).join(', '),
           fuel_added_gal: entry.fuel_added_gal ?? '',
+          gps_lat: entry.gps_lat ?? null,
+          gps_lng: entry.gps_lng ?? null,
           oil_checked: entry.oil_checked,
           maintenance_notes: entry.maintenance_notes || '',
           notes: entry.notes || '',
