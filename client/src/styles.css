@@ -333,9 +333,8 @@ form.entry-form {
   font-family: inherit;
 }
 
-.field input[type="time"] {
-  padding-top: 0.4rem;
-  padding-bottom: 0.4rem;
+.field input {
+  height: 2.4rem;
 }
 
 .field input:focus,
