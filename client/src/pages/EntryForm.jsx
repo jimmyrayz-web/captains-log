@@ -12,6 +12,11 @@ function computeDurationHours(departureTime, arrivalTime) {
   return String(Math.round((minutes / 60) * 100) / 100);
 }
 
+function computeFuelConsumed(departureFuel, arrivalFuel) {
+  const consumed = Number(departureFuel) - Number(arrivalFuel);
+  return String(Math.round(consumed * 100) / 100);
+}
+
 const EMPTY = {
   date: new Date().toISOString().slice(0, 10),
   weather: '',
@@ -22,6 +27,7 @@ const EMPTY = {
   arrival_point: '',
   arrival_time: '',
   arrival_fuel: '',
+  fuel_consumed: '',
   distance_nm: '',
   duration_hours: '',
   crew: 'James, Steve',
@@ -61,6 +67,7 @@ export default function EntryForm() {
           arrival_point: entry.arrival_point || '',
           arrival_time: entry.arrival_time || '',
           arrival_fuel: entry.arrival_fuel ?? '',
+          fuel_consumed: entry.fuel_consumed ?? '',
           distance_nm: entry.distance_nm ?? '',
           duration_hours: entry.duration_hours ?? '',
           crew: (entry.crew || []).join(', '),
@@ -84,6 +91,16 @@ export default function EntryForm() {
       const next = { ...f, [field]: value };
       if (next.departure_time && next.arrival_time) {
         next.duration_hours = computeDurationHours(next.departure_time, next.arrival_time);
+      }
+      return next;
+    });
+  }
+
+  function updateFuel(field, value) {
+    setForm((f) => {
+      const next = { ...f, [field]: value };
+      if (next.departure_fuel !== '' && next.arrival_fuel !== '') {
+        next.fuel_consumed = computeFuelConsumed(next.departure_fuel, next.arrival_fuel);
       }
       return next;
     });
@@ -135,6 +152,7 @@ export default function EntryForm() {
         fuel_added_gal: form.fuel_added_gal === '' ? null : Number(form.fuel_added_gal),
         departure_fuel: form.departure_fuel === '' ? null : Number(form.departure_fuel),
         arrival_fuel: form.arrival_fuel === '' ? null : Number(form.arrival_fuel),
+        fuel_consumed: form.fuel_consumed === '' ? null : Number(form.fuel_consumed),
       };
       if (isEdit) {
         await updateEntry(id, payload);
@@ -225,7 +243,7 @@ export default function EntryForm() {
               type="number"
               step="0.1"
               value={form.departure_fuel}
-              onChange={(e) => update('departure_fuel', e.target.value)}
+              onChange={(e) => updateFuel('departure_fuel', e.target.value)}
             />
           </div>
           <div className="field">
@@ -253,7 +271,17 @@ export default function EntryForm() {
               type="number"
               step="0.1"
               value={form.arrival_fuel}
-              onChange={(e) => update('arrival_fuel', e.target.value)}
+              onChange={(e) => updateFuel('arrival_fuel', e.target.value)}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="fuel_consumed">Total Fuel Consumed</label>
+            <input
+              id="fuel_consumed"
+              type="number"
+              step="0.1"
+              value={form.fuel_consumed}
+              onChange={(e) => update('fuel_consumed', e.target.value)}
             />
           </div>
           <div className="field">

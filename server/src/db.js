@@ -33,6 +33,7 @@ await db.execute(`
     arrival_point TEXT,
     arrival_time TEXT,
     arrival_fuel REAL,
+    fuel_consumed REAL,
     distance_nm REAL,
     duration_hours REAL,
     crew TEXT,
@@ -56,6 +57,7 @@ const newColumns = [
   ['arrival_time', 'TEXT'],
   ['departure_fuel', 'REAL'],
   ['arrival_fuel', 'REAL'],
+  ['fuel_consumed', 'REAL'],
 ];
 for (const [name, type] of newColumns) {
   if (!existingColumns.has(name)) {

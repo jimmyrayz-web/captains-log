@@ -118,6 +118,12 @@ export default function EntryDetail() {
               <span className="value">{entry.arrival_fuel}</span>
             </div>
           )}
+          {entry.fuel_consumed != null && (
+            <div className="stat">
+              <span className="label">Total Fuel Consumed</span>
+              <span className="value">{entry.fuel_consumed}</span>
+            </div>
+          )}
           {entry.distance_nm != null && (
             <div className="stat">
               <span className="label">Distance</span>

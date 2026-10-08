@@ -33,6 +33,7 @@ const ENTRY_FIELDS = [
   'arrival_point',
   'arrival_time',
   'arrival_fuel',
+  'fuel_consumed',
   'distance_nm',
   'duration_hours',
   'crew',
