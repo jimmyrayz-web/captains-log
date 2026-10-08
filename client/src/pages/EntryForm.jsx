@@ -295,7 +295,7 @@ export default function EntryForm() {
             />
           </div>
           <div className="field">
-            <label htmlFor="duration_hours">Duration (hours)</label>
+            <label htmlFor="duration_hours">Trip Duration (hours)</label>
             <input
               id="duration_hours"
               type="number"

@@ -11,7 +11,7 @@ export const CSV_COLUMNS = [
   ['arrival_fuel', 'Arrival Fuel'],
   ['fuel_consumed', 'Total Fuel Consumed'],
   ['distance_nm', 'Distance (nm)'],
-  ['duration_hours', 'Duration (hrs)'],
+  ['duration_hours', 'Trip Duration (hrs)'],
   ['weather', 'Weather'],
   ['engine_hours', 'Engine Hours'],
   ['fuel_added_gal', 'Fuel Added (gal)'],

@@ -132,7 +132,7 @@ export default function EntryDetail() {
           )}
           {entry.duration_hours != null && (
             <div className="stat">
-              <span className="label">Duration</span>
+              <span className="label">Trip Duration</span>
               <span className="value">{entry.duration_hours} hrs</span>
             </div>
           )}
