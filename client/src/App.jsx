@@ -3,6 +3,7 @@ import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom'
 import ListView from './pages/ListView.jsx';
 import EntryForm from './pages/EntryForm.jsx';
 import EntryDetail from './pages/EntryDetail.jsx';
+import Reports from './pages/Reports.jsx';
 import { exportEntriesZip, importEntriesZip } from './exportImport.js';
 
 export default function App() {
@@ -57,6 +58,11 @@ export default function App() {
   function triggerImport() {
     setMenuOpen(false);
     importInputRef.current?.click();
+  }
+
+  function openReports() {
+    setMenuOpen(false);
+    navigate('/reports');
   }
 
   async function handleImportFile(e) {
@@ -127,6 +133,9 @@ export default function App() {
                 <button type="button" onClick={openSearch}>
                   🔍 Search
                 </button>
+                <button type="button" onClick={openReports}>
+                  📊 Reports
+                </button>
                 <button type="button" onClick={handleExport}>
                   ⬇️ Export
                 </button>
@@ -152,6 +161,7 @@ export default function App() {
           <Route path="/new" element={<EntryForm />} />
           <Route path="/entries/:id" element={<EntryDetail />} />
           <Route path="/entries/:id/edit" element={<EntryForm />} />
+          <Route path="/reports" element={<Reports />} />
         </Routes>
       </main>
 

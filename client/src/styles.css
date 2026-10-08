@@ -533,6 +533,76 @@ textarea {
   font-weight: 600;
 }
 
+.reports-page {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.9rem;
+}
+
+.stat-card {
+  background: var(--cream);
+  border: 1px solid var(--sand-dark);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px var(--shadow);
+  padding: 0.9rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-card .label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #7c8b98;
+  font-weight: 600;
+}
+
+.stat-card .value {
+  font-size: 1.3rem;
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.chart-card {
+  padding: 1.1rem 1.1rem 0.4rem;
+}
+
+.chart-card h3 {
+  margin: 0 0 0.6rem;
+  color: var(--navy);
+  font-size: 1rem;
+}
+
+.chart-scroll {
+  overflow-x: auto;
+  margin: 0 -0.2rem;
+}
+
+.chart-svg {
+  display: block;
+}
+
+.chart-axis-line {
+  stroke: var(--sand-dark);
+  stroke-width: 1;
+}
+
+.chart-axis-label {
+  font-size: 10px;
+  fill: #7c8b98;
+}
+
+.chart-x-label {
+  font-size: 10px;
+  fill: #7c8b98;
+}
+
 .notes-block h3 {
   margin: 0 0 0.4rem;
   color: var(--navy);
