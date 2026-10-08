@@ -110,6 +110,7 @@ export default function EntryForm() {
 
   function handleChecklistClear() {
     setChecklistChecked({});
+    update('oil_checked', false);
   }
 
   function handleOilCheckedChange(e) {
