@@ -69,6 +69,14 @@ export default function Reports() {
     [chronological]
   );
 
+  const fuelAddedSeries = useMemo(
+    () =>
+      chronological
+        .filter((e) => e.fuel_added_gal != null)
+        .map((e) => ({ label: shortDate(e.date), value: Number(e.fuel_added_gal) })),
+    [chronological]
+  );
+
   const tripsPerMonth = useMemo(() => {
     const counts = new Map();
     for (const e of chronological) {
@@ -90,8 +98,11 @@ export default function Reports() {
       totalDistance: distanceSeries.length ? Math.round(sum(distanceSeries.map((d) => d.value)) * 10) / 10 : null,
       totalDuration: durationSeries.length ? Math.round(sum(durationSeries.map((d) => d.value)) * 10) / 10 : null,
       totalFuel: fuelSeries.length ? Math.round(sum(fuelSeries.map((d) => d.value)) * 10) / 10 : null,
+      totalFuelAdded: fuelAddedSeries.length
+        ? Math.round(sum(fuelAddedSeries.map((d) => d.value)) * 10) / 10
+        : null,
     };
-  }, [chronological, engineHoursSeries, distanceSeries, durationSeries, fuelSeries]);
+  }, [chronological, engineHoursSeries, distanceSeries, durationSeries, fuelSeries, fuelAddedSeries]);
 
   return (
     <>
@@ -154,6 +165,12 @@ export default function Reports() {
                 <span className="value">{stats.totalFuel} gal</span>
               </div>
             )}
+            {stats.totalFuelAdded != null && (
+              <div className="stat-card">
+                <span className="label">Total Fuel Added</span>
+                <span className="value">{stats.totalFuelAdded} gal</span>
+              </div>
+            )}
           </div>
 
           {engineHoursSeries.length > 0 && (
@@ -181,6 +198,13 @@ export default function Reports() {
             <div className="chart-card card">
               <h3>Fuel Consumed Per Trip (gal)</h3>
               <BarChart data={fuelSeries} unit=" gal" color="var(--rust)" />
+            </div>
+          )}
+
+          {fuelAddedSeries.length > 0 && (
+            <div className="chart-card card">
+              <h3>Fuel Added Per Trip (gal)</h3>
+              <BarChart data={fuelAddedSeries} unit=" gal" color="var(--rust)" />
             </div>
           )}
 
