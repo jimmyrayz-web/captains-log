@@ -21,10 +21,22 @@ function sum(values) {
   return values.reduce((a, b) => a + b, 0);
 }
 
+function todayIso() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function isoDateMinusMonths(months) {
+  const d = new Date();
+  d.setMonth(d.getMonth() - months);
+  return d.toISOString().slice(0, 10);
+}
+
 export default function Reports() {
   const navigate = useNavigate();
   const [entries, setEntries] = useState(null);
   const [error, setError] = useState('');
+  const [startDate, setStartDate] = useState(() => isoDateMinusMonths(1));
+  const [endDate, setEndDate] = useState(() => todayIso());
 
   useEffect(() => {
     listEntries()
@@ -34,8 +46,16 @@ export default function Reports() {
 
   const chronological = useMemo(() => {
     if (!entries) return [];
-    return [...entries].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : a.id - b.id));
-  }, [entries]);
+    const sorted = [...entries].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : a.id - b.id));
+    return sorted.filter((e) => (!startDate || e.date >= startDate) && (!endDate || e.date <= endDate));
+  }, [entries, startDate, endDate]);
+
+  function showAllTime() {
+    if (entries && entries.length > 0) {
+      setStartDate([...entries].sort((a, b) => (a.date < b.date ? -1 : 1))[0].date);
+    }
+    setEndDate(todayIso());
+  }
 
   const engineHoursSeries = useMemo(
     () =>
@@ -136,6 +156,39 @@ export default function Reports() {
 
       {entries && entries.length > 0 && (
         <div className="reports-page">
+          <div className="reports-filter card">
+            <div className="field">
+              <label htmlFor="report-start">From</label>
+              <input
+                id="report-start"
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="report-end">To</label>
+              <input
+                id="report-end"
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </div>
+            <button type="button" className="button secondary" onClick={showAllTime}>
+              All Time
+            </button>
+          </div>
+
+          {chronological.length === 0 && (
+            <div className="card empty-state">
+              <span className="anchor">📭</span>
+              No trips logged between {startDate} and {endDate}.
+            </div>
+          )}
+
+          {chronological.length > 0 && (
+          <>
           <div className="stat-cards">
             <div className="stat-card">
               <span className="label">Total Trips</span>
@@ -213,6 +266,8 @@ export default function Reports() {
               <h3>Trips Per Month</h3>
               <BarChart data={tripsPerMonth} color="var(--navy)" />
             </div>
+          )}
+          </>
           )}
         </div>
       )}

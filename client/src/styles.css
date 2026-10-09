@@ -538,6 +538,29 @@ textarea {
   gap: 1.5rem;
 }
 
+.reports-filter {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  padding: 1rem 1.1rem;
+}
+
+.reports-filter .field {
+  gap: 0.25rem;
+}
+
+.reports-filter .field label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #7c8b98;
+}
+
+.reports-filter input[type="date"] {
+  min-height: 2.6rem;
+}
+
 .map-card {
   padding: 0.6rem;
   overflow: hidden;
