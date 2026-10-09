@@ -208,7 +208,7 @@ export default function Reports() {
             )}
             {stats.engineHoursRun != null && (
               <div className="stat-card">
-                <span className="label">Engine Hours</span>
+                <span className="label">Total Hours Run</span>
                 <span className="value">{stats.engineHoursRun}</span>
               </div>
             )}
