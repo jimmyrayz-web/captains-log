@@ -112,9 +112,15 @@ export default function Reports() {
     const latestEngineHours = engineHoursSeries.length
       ? engineHoursSeries[engineHoursSeries.length - 1].value
       : null;
+    const engineHoursRun = engineHoursSeries.length
+      ? Math.round(
+          (engineHoursSeries[engineHoursSeries.length - 1].value - engineHoursSeries[0].value) * 10
+        ) / 10
+      : null;
     return {
       trips: chronological.length,
       latestEngineHours,
+      engineHoursRun,
       totalDistance: distanceSeries.length ? Math.round(sum(distanceSeries.map((d) => d.value)) * 10) / 10 : null,
       totalDuration: durationSeries.length ? Math.round(sum(durationSeries.map((d) => d.value)) * 10) / 10 : null,
       totalFuel: fuelSeries.length ? Math.round(sum(fuelSeries.map((d) => d.value)) * 10) / 10 : null,
@@ -198,6 +204,12 @@ export default function Reports() {
               <div className="stat-card">
                 <span className="label">Latest Engine Hours</span>
                 <span className="value">{stats.latestEngineHours}</span>
+              </div>
+            )}
+            {stats.engineHoursRun != null && (
+              <div className="stat-card">
+                <span className="label">Engine Hours</span>
+                <span className="value">{stats.engineHoursRun}</span>
               </div>
             )}
             {stats.totalDistance != null && (
