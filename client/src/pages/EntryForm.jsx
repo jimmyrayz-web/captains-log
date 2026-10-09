@@ -17,6 +17,19 @@ function computeFuelConsumed(departureFuel, arrivalFuel) {
   return String(Math.round(consumed * 100) / 100);
 }
 
+const GPS_LINE_PATTERN = /^GPS: -?\d+(\.\d+)?, -?\d+(\.\d+)?$/;
+
+function withGpsLine(notes, lat, lng) {
+  if (lat == null || lng == null) return notes;
+  const line = `GPS: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+  const lines = (notes || '').split('\n');
+  if (GPS_LINE_PATTERN.test(lines[0])) {
+    lines[0] = line;
+    return lines.join('\n');
+  }
+  return notes ? `${line}\n${notes}` : line;
+}
+
 const EMPTY = {
   date: new Date().toISOString().slice(0, 10),
   weather: '',
@@ -172,6 +185,7 @@ export default function EntryForm() {
         departure_fuel: form.departure_fuel === '' ? null : Number(form.departure_fuel),
         arrival_fuel: form.arrival_fuel === '' ? null : Number(form.arrival_fuel),
         fuel_consumed: form.fuel_consumed === '' ? null : Number(form.fuel_consumed),
+        notes: withGpsLine(form.notes, form.gps_lat, form.gps_lng),
       };
       if (isEdit) {
         await updateEntry(id, payload);
