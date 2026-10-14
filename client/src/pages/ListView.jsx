@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listEntries } from '../api.js';
 
-const SCROLL_KEY = 'captains-log-list-scroll-y';
+export const SCROLL_KEY = 'captains-log-list-scroll-y';
 
 function formatDate(dateStr) {
   const d = new Date(`${dateStr}T00:00:00`);

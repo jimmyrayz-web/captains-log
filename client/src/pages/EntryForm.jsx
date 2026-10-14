@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getEntry, createEntry, updateEntry } from '../api.js';
 import PhotoGallery from '../components/PhotoGallery.jsx';
 import ChecklistModal, { CHECKLIST_GROUPS } from '../components/ChecklistModal.jsx';
+import { SCROLL_KEY } from './ListView.jsx';
 
 function computeDurationHours(departureTime, arrivalTime) {
   const [dh, dm] = departureTime.split(':').map(Number);
@@ -191,8 +192,9 @@ export default function EntryForm() {
         await updateEntry(id, payload);
         navigate(`/entries/${id}`);
       } else {
-        const created = await createEntry(payload);
-        navigate(`/entries/${created.id}`);
+        await createEntry(payload);
+        sessionStorage.removeItem(SCROLL_KEY);
+        navigate('/');
       }
     } catch (err) {
       setError(err.message);
