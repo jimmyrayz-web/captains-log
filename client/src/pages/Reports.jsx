@@ -162,7 +162,7 @@ export default function Reports() {
 
       {entries && entries.length > 0 && (
         <div className="reports-page">
-          <div className="reports-filter card">
+          <div className="date-filter card">
             <div className="field">
               <label htmlFor="report-start">From</label>
               <input

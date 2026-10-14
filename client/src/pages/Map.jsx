@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -31,6 +31,8 @@ export default function MapPage() {
   const navigate = useNavigate();
   const [entries, setEntries] = useState(null);
   const [error, setError] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
 
@@ -40,7 +42,19 @@ export default function MapPage() {
       .catch((err) => setError(err.message));
   }, []);
 
-  const located = entries ? entries.filter((e) => e.gps_lat != null && e.gps_lng != null) : [];
+  function showAllTime() {
+    setStartDate('');
+    setEndDate('');
+  }
+
+  const inRange = useMemo(
+    () =>
+      entries
+        ? entries.filter((e) => (!startDate || e.date >= startDate) && (!endDate || e.date <= endDate))
+        : [],
+    [entries, startDate, endDate]
+  );
+  const located = useMemo(() => inRange.filter((e) => e.gps_lat != null && e.gps_lng != null), [inRange]);
 
   useEffect(() => {
     if (!mapContainerRef.current || located.length === 0) return;
@@ -73,7 +87,7 @@ export default function MapPage() {
       map.remove();
       mapRef.current = null;
     };
-  }, [located.length, entries]);
+  }, [located, entries]);
 
   return (
     <>
@@ -88,10 +102,10 @@ export default function MapPage() {
 
       {entries === null && !error && <div className="loading">Loading map…</div>}
 
-      {entries && located.length === 0 && (
+      {entries && entries.length === 0 && (
         <div className="card empty-state">
           <span className="anchor">🗺️</span>
-          No trips have a saved location yet. New entries will be pinned here automatically.
+          No entries logged yet. New entries will be pinned here automatically.
           <div style={{ marginTop: '1rem' }}>
             <Link to="/new" className="button">
               + New Entry
@@ -100,9 +114,46 @@ export default function MapPage() {
         </div>
       )}
 
-      {entries && located.length > 0 && (
-        <div className="card map-card">
-          <div ref={mapContainerRef} className="map-container" />
+      {entries && entries.length > 0 && (
+        <div className="map-page">
+          <div className="date-filter card">
+            <div className="field">
+              <label htmlFor="map-start">From</label>
+              <input
+                id="map-start"
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="map-end">To</label>
+              <input
+                id="map-end"
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </div>
+            <button type="button" className="button secondary" onClick={showAllTime}>
+              All Time
+            </button>
+          </div>
+
+          {located.length === 0 && (
+            <div className="card empty-state">
+              <span className="anchor">🗺️</span>
+              {inRange.length === 0
+                ? 'No trips logged in that date range.'
+                : 'No trips with a saved location in that date range.'}
+            </div>
+          )}
+
+          {located.length > 0 && (
+            <div className="card map-card">
+              <div ref={mapContainerRef} className="map-container" />
+            </div>
+          )}
         </div>
       )}
     </>
