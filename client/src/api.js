@@ -1,3 +1,5 @@
+import { shrinkImage } from './shrinkImage.js';
+
 const BASE = import.meta.env.VITE_API_URL || '';
 
 async function request(path, options = {}) {
@@ -44,9 +46,9 @@ export function deleteEntry(id) {
   return request(`/api/entries/${id}`, { method: 'DELETE' });
 }
 
-export function uploadPhotos(entryId, files) {
+export async function uploadPhotos(entryId, files) {
   const formData = new FormData();
-  for (const file of files) formData.append('photos', file);
+  for (const file of files) formData.append('photos', await shrinkImage(file));
   return request(`/api/entries/${entryId}/photos`, {
     method: 'POST',
     body: formData,

@@ -7,11 +7,52 @@ import Reports from './pages/Reports.jsx';
 import MapPage from './pages/Map.jsx';
 import { exportEntriesZip, importEntriesZip } from './exportImport.js';
 
+const LAST_BACKUP_KEY = 'captains-log-last-backup';
+const SNOOZE_KEY = 'captains-log-backup-snooze-until';
+const BACKUP_REMINDER_DAYS = 60;
+const SNOOZE_DAYS = 7;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+// Remembered per device, which is fine for a single-user app: worst case a
+// second device nags once until a backup is made from it too.
+function readStoredTime(key) {
+  try {
+    const value = Number(localStorage.getItem(key));
+    return Number.isFinite(value) && value > 0 ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeStoredTime(key, value) {
+  try {
+    localStorage.setItem(key, String(value));
+  } catch {
+    // storage unavailable (e.g. private browsing); the reminder just returns
+  }
+}
+
+function isBackupDue() {
+  const now = Date.now();
+  const snoozeUntil = readStoredTime(SNOOZE_KEY);
+  if (snoozeUntil && snoozeUntil > now) return false;
+  const lastBackup = readStoredTime(LAST_BACKUP_KEY);
+  return !lastBackup || now - lastBackup > BACKUP_REMINDER_DAYS * DAY_MS;
+}
+
+function describeLastBackup() {
+  const lastBackup = readStoredTime(LAST_BACKUP_KEY);
+  if (!lastBackup) return 'Never backed up on this device';
+  return `Last backup: ${new Date(lastBackup).toLocaleDateString()}`;
+}
+
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [listKey, setListKey] = useState(0);
+  const [backupDue, setBackupDue] = useState(isBackupDue);
+  const [backingUp, setBackingUp] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const menuRef = useRef(null);
@@ -43,17 +84,29 @@ export default function App() {
 
   async function handleExport() {
     setMenuOpen(false);
+    if (backingUp) return;
+    setBackingUp(true);
     try {
       const blob = await exportEntriesZip();
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `captains-log-export-${new Date().toISOString().slice(0, 10)}.zip`;
+      link.download = `captains-log-backup-${new Date().toISOString().slice(0, 10)}.zip`;
       link.click();
-      URL.revokeObjectURL(url);
+      // Revoking immediately can cancel the download on mobile Safari.
+      setTimeout(() => URL.revokeObjectURL(url), 60 * 1000);
+      writeStoredTime(LAST_BACKUP_KEY, Date.now());
+      setBackupDue(false);
     } catch (err) {
-      alert(`Export failed: ${err.message}`);
+      alert(`Backup failed: ${err.message}`);
+    } finally {
+      setBackingUp(false);
     }
+  }
+
+  function snoozeBackupReminder() {
+    writeStoredTime(SNOOZE_KEY, Date.now() + SNOOZE_DAYS * DAY_MS);
+    setBackupDue(false);
   }
 
   function triggerImport() {
@@ -145,8 +198,9 @@ export default function App() {
                 <button type="button" onClick={openMap}>
                   🗺️ Map
                 </button>
-                <button type="button" onClick={handleExport}>
-                  ⬇️ Export
+                <button type="button" onClick={handleExport} disabled={backingUp}>
+                  ⬇️ {backingUp ? 'Backing up…' : 'Backup (Export)'}
+                  <span className="nav-menu-note">{describeLastBackup()}</span>
                 </button>
                 <button type="button" onClick={triggerImport}>
                   ⬆️ Import
@@ -165,6 +219,27 @@ export default function App() {
       </header>
 
       <main className="main-content">
+        {backingUp && (
+          <div className="backup-banner no-print">
+            Preparing your backup with all photos… this can take a minute.
+          </div>
+        )}
+        {!backingUp && backupDue && location.pathname === '/' && (
+          <div className="backup-banner no-print">
+            <span>
+              🛟 Time to back up your log. It saves every entry and photo to a file on
+              this device.
+            </span>
+            <span className="backup-banner-actions">
+              <button type="button" className="button" onClick={handleExport}>
+                Back up now
+              </button>
+              <button type="button" className="backup-banner-later" onClick={snoozeBackupReminder}>
+                Later
+              </button>
+            </span>
+          </div>
+        )}
         <Routes>
           <Route path="/" element={<ListView key={listKey} searchQuery={searchQuery} />} />
           <Route path="/new" element={<EntryForm />} />
